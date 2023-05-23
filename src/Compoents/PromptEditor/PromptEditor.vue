@@ -8,10 +8,11 @@
                 @delete="doDeletePromptWork"
             />
         </div>
-
         <div class="operate-tool" ref="operate-tool">
             <button @click="doAddWorkspace"><Icon icon="radix-icons:card-stack-plus" /> 添加工作区</button>
             <button @click="doCopyWorkspaceUrl"><Icon icon="radix-icons:link-2" /> 复制链接</button>
+            <button @click="doSaveWorkspaceUrl"><Icon icon="radix-icons:archive" /> 保存提示区</button>
+
 
             <div class="pngout-option checkbox">
                 <input id="ope-expf" type="checkbox" v-model="promptEditor.data.enablePngExportFixed" />
@@ -36,11 +37,6 @@
                 </div>
                 <select v-model="promptEditor.data.server">
                     <option :value="LocalTrasnslateServer" :title="LocalTrasnslateServer">本地翻译接口</option>
-                    <option value="https://indexfs.moonvy.com:19213/prompt-studio">腾讯翻译</option>
-                    <option value="https://indexfs.moonvy.com:19213/prompt-studio2">腾讯翻译 2</option>
-                    <option value="https://indexfs.moonvy.com:19213/prompt-studio/ai" disabled>
-                        OpenAI GPT-3.5 (WIP)
-                    </option>
                 </select>
             </div>
         </div>
@@ -139,11 +135,6 @@
                 </div>
             </div>
         </div>
-
-        <!--    在使用 indexfs.moonvy.com 的翻译服务时显示广告，尝试给腾讯翻译的服务费回血    -->
-        <div v-if="needShowAd" class="回血-box" v-tooltip="'广告商提供的内容，与本网站（Moonvy 月维）无关'">
-            <a href="https://nf.video/yinhe/web?sharedId=124758" target="_blank"> <img src="./Assets/ad.png" /> </a>
-        </div>
     </div>
 </template>
 <style lang="scss">
@@ -233,17 +224,16 @@ export default {
             let url = `${location.origin + location.pathname}?prompts=${q}`
             copy(url)
         },
+        doSaveWorkspaceUrl() {
+            this.promptEditor.saveWorkspace()
+        },
 
         doDeletePromptWork(promptWork) {
             this.promptEditor.removeWorkspace(promptWork)
         },
     },
     computed: {
-        needShowAd() {
-            if (this.adDelay && this.promptEditor.data.server?.startsWith("https://indexfs.moonvy.com")) {
-                return true
-            }
-        },
+
     },
 }
 </script>

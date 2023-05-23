@@ -29,7 +29,7 @@ export interface IPromptParseResult {
 export async function parsePrompts(
     text: string,
     options: { parser: string; minify?: boolean; zh2en?: boolean } = {
-        parser: "midjourney",
+        parser: "stable-diffusion-webui",
     }
 ): Promise<IPromptParseResult> {
     let words: IPromptWord[]

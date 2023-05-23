@@ -105,15 +105,31 @@ export class PromptWork {
 
     /** 导出提示词 */
     exportPrompts() {
-        return stringifyPrompts(this.groups, { parser: this.data.parser ?? "midjourney" })
+        return stringifyPrompts(this.groups, { parser: this.data.parser ?? "stable-diffusion-webui" })
     }
 
     async reflowPrompts(addPrompt?: string) {
+        //从groups中取出addPrompt相同的项
+        let addPromptObj;
+        for (let group of this.groups) {
+            for (let list of group.lists) {
+                for (let item of list.items) {
+                    if (item.data.word.text === addPrompt) {
+                        addPromptObj = item
+                        break
+                    }
+                }
+            }
+        }
+        if (addPromptObj) {
+            addPromptObj.data.disabled = !addPromptObj.data.disabled
+            return
+        }
         let prompt = this.exportPrompts()
         if (addPrompt) {
             prompt += " , " + addPrompt
         }
-        await this.importPrompts(prompt, { parser: <any>this.data.parser ?? "midjourney" })
+        await this.importPrompts(prompt, { parser: <any>this.data.parser ?? "stable-diffusion-webui" })
     }
 
     /** 翻译全部提示词 */
